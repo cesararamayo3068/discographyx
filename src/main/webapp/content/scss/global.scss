@@ -234,3 +234,16 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   }
 }
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+
+/* DiscographyX dark theme - global surfaces */
+html, body { background: #0b0b0d; color: #ece8e8; }
+body { font-family: 'Segoe UI', Arial, sans-serif; }
+.jh-card { background: #111113; color: #eee; border: 1px solid #29272a; margin-top: 0; padding: 0; overflow: hidden; }
+.container-fluid:has(> .jh-card) { padding: 0; }
+.footer { border-color: #2e2a2d; background: #0c0c0e; color: #8e898b; padding: 12px 24px; }
+a { color: #f05557; }
+a:hover { color: #ff7779; }
+.form-control { background: #242427; border-color: #494449; color: #fff; }
+.form-control:focus { background: #29292d; color: #fff; border-color: #ed3638; box-shadow: 0 0 0 .2rem #ed36382b; }
+.card:not(.jh-card), .modal-content { background: #1b1b1e; color: #eee; border-color: #373438; }
+.table { --bs-table-bg: transparent; --bs-table-color: #e7e2e2; --bs-table-border-color: #353237; }
