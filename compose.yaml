@@ -1,0 +1,73 @@
+name: discographyx
+
+services:
+  discographyx-postgres:
+    image: postgres:17
+    container_name: discographyx-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: discographyx
+      POSTGRES_USER: discographyx
+      POSTGRES_PASSWORD: ${DISCOGRAPHYX_DB_PASSWORD}
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - discographyx-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U discographyx -d discographyx"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  discographyx-backend:
+    image: jhipster/jhipster:latest
+    container_name: discographyx-backend
+    restart: unless-stopped
+    working_dir: /home/jhipster/app
+    command: ./mvnw
+    ports:
+      - "127.0.0.1:18081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://discographyx-postgres:5432/discographyx
+      SPRING_DATASOURCE_USERNAME: discographyx
+      SPRING_DATASOURCE_PASSWORD: ${DISCOGRAPHYX_DB_PASSWORD}
+      SPRING_DOCKER_COMPOSE_ENABLED: "false"
+    volumes:
+      - generator-work:/home/jhipster/app
+    networks:
+      - discographyx-network
+    depends_on:
+      discographyx-postgres:
+        condition: service_healthy
+
+  discographyx-frontend:
+    image: jhipster/jhipster:latest
+    container_name: discographyx-frontend
+    restart: unless-stopped
+    working_dir: /home/jhipster/app
+    command: sh -c "npm start -- --host 0.0.0.0"
+    ports:
+      - "127.0.0.1:14201:4200"
+    volumes:
+      - generator-work:/home/jhipster/app
+    networks:
+      - discographyx-network
+    depends_on:
+      - discographyx-backend
+
+networks:
+  discographyx-network:
+    external: true
+    name: discographyx-network
+
+volumes:
+  postgres-data:
+    external: true
+    name: discographyx-postgres-data
+
+  generator-work:
+    external: true
+    name: discographyx-generator-work
