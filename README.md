@@ -1,265 +1,126 @@
-# discographyx
+# DiscographyX 🎸
 
-This application was generated using JHipster 9.4.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.4.0](https://www.jhipster.tech/documentation-archive/v9.4.0).
+**DiscographyX** es una aplicación web en desarrollo para explorar bandas, álbumes y discografías de heavy metal y sus subgéneros (death, thrash, black y doom metal).
 
-## Project Structure
+> **Estado actual:** prototipo funcional con interfaz personalizada, autenticación y entorno de desarrollo Docker. El catálogo de bandas y álbumes, las búsquedas reales y la integración con MusicBrainz **todavía no están implementados**.
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+## Tecnologías
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+| Capa | Tecnología |
+| --- | --- |
+| Generador | JHipster 9.4.0 (monolito) |
+| Frontend | Angular 22, TypeScript, SCSS |
+| Backend | Java 21, Spring Boot 4.1.1, Maven |
+| Base de datos | PostgreSQL 17, Liquibase |
+| Autenticación | JWT (base generada por JHipster) |
+| Desarrollo | Docker y Docker Compose |
 
-`/src/*` structure follows default Java structure.
+## Funcionalidades
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
+**Implementadas**
 
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+- Página de inicio y navegación con estética metalera, diseño oscuro y secciones exploratorias.
+- Autenticación y administración provistas por JHipster.
+- Comunicación Angular → Spring Boot → PostgreSQL en el entorno de desarrollo.
 
-## Development
+**Planeadas**
 
-The build system will install automatically the recommended version of Node and npm.
+- Entidades y operaciones CRUD para bandas y álbumes.
+- Discografía cronológica por banda.
+- Búsqueda y filtros por género, país y año.
+- Consulta de información musical desde MusicBrainz.
 
-We provide a wrapper to launch npm.
-You will only need to run this command when dependencies change in [package.json](package.json).
+> Las tarjetas de bandas y álbumes de la portada son por ahora elementos de presentación, no un catálogo funcional.
 
-```bash
-./npmw install
+## Organización del código
+
+```text
+src/main/java/                  Backend Java / Spring Boot
+src/main/resources/             Configuración, Liquibase y recursos
+src/main/webapp/app/            Aplicación Angular
+src/main/webapp/app/home/       Portada de DiscographyX
+src/main/webapp/app/layouts/    Navegación y estructura de la UI
+src/main/webapp/content/scss/   Estilos globales
+src/main/docker/                Configuraciones auxiliares de JHipster
+compose.yaml                    Orquestación local de tres servicios
 ```
 
-We use npm scripts and [Angular CLI](https://angular.dev/tools/cli) with esbuild as our build system.
+## Desarrollo local con Docker
 
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
+El proyecto se trabaja en **Windows + Docker Desktop**, sin instalar Java, Node.js ni Maven globalmente en Windows.
 
-```bash
-./npmw run backend:start
-./npmw run start
+### Puertos
+
+| Servicio | Dirección local |
+| --- | --- |
+| Angular | `http://localhost:14201` |
+| Spring Boot | `http://localhost:18081` |
+| PostgreSQL | `127.0.0.1:55433` |
+
+### Preparación de la configuración
+
+1. Copiar `.env.example` a `.env` en la raíz del proyecto.
+2. Completar `DISCOGRAPHYX_DB_PASSWORD` con la contraseña correspondiente a **tu base de datos local**.
+3. Mantener `.env` fuera del control de versiones. No subir contraseñas ni secretos JWT a GitHub.
+
+### Iniciar y detener
+
+Desde la carpeta del proyecto:
+
+```cmd
+docker compose up -d
 ```
 
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `./npmw update` and `./npmw install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `./npmw help update`.
-
-The `./npmw run` command will list all the scripts available to run for this project.
-
-### PWA Support
-
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
-
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `src/main/webapp/app/app.config.ts`:
-
-```typescript
-ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+```cmd
+docker compose ps
 ```
 
-### Managing dependencies
-
-For example, to add [Leaflet](https://leafletjs.com/) library as a runtime dependency of your application, you would run the following command:
-
-```bash
-./npmw install --save --save-exact leaflet
+```cmd
+docker compose stop
 ```
 
-To benefit from TypeScript type definitions from [DefinitelyTyped](https://definitelytyped.org/) repository in development, you would run the following command:
+Para volver a iniciar los servicios detenidos:
 
-```bash
-./npmw install --save-dev --save-exact @types/leaflet
+```cmd
+docker compose start
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [esbuild][] knows about them:
-Edit [src/main/webapp/app/app.config.ts](src/main/webapp/app/app.config.ts) file:
+### Importante: configuración de desarrollo existente
 
-```typescript
-import 'leaflet/dist/leaflet.js';
+El archivo `compose.yaml` actual **no es una instalación autocontenida desde cero**. Reutiliza volúmenes Docker externos ya preparados:
+
+- `discographyx-generator-work`: código generado, dependencias y entorno de trabajo de JHipster.
+- `discographyx-postgres-data`: datos persistentes de PostgreSQL.
+
+También utiliza la red externa `discographyx-network`. Esos recursos deben existir previamente y contener la aplicación/configuración esperada. **Clonar este repositorio y ejecutar `docker compose up -d` en otra computadora no alcanza para reproducir el entorno**; queda pendiente crear una configuración de instalación limpia y portable.
+
+Además, los contenedores leen el código del volumen `discographyx-generator-work`, **no directamente de la carpeta Windows**. Si se cambian archivos locales, hay que sincronizarlos con el volumen o modificar la estrategia de montaje. Para actualizar la interfaz en el entorno actual:
+
+```cmd
+docker cp src/main/webapp/. discographyx-frontend:/home/jhipster/app/src/main/webapp/
 ```
 
-Edit [src/main/webapp/content/scss/vendor.scss](src/main/webapp/content/scss/vendor.scss) file:
+El frontend de desarrollo puede recompilar automáticamente al detectar los cambios.
 
-```typescript
-@import 'leaflet/dist/leaflet.css';
-```
+## Flujo de trabajo
 
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
+- Cambios agrupados por etapas, habitualmente distribuidos como archivos ZIP.
+- Versionado con Git y mensajes de commit en inglés.
+- Dependencias y herramientas de compilación ejecutadas dentro de Docker.
+- El archivo `.env` y cualquier otro secreto deben permanecer fuera del repositorio.
 
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development](https://www.jhipster.tech/development/).
+## Próximos pasos
 
-### Using Angular CLI
+1. Modelar bandas y álbumes con JHipster.
+2. Conectar la portada con datos reales.
+3. Incorporar MusicBrainz.
+4. Crear un Docker Compose reproducible desde un clon limpio.
+5. Añadir pruebas, capturas y documentación de despliegue.
 
-You can also use [Angular CLI](https://angular.dev/tools/cli) to generate some custom client code.
+## Referencias
 
-For example, the following command:
+- Documentación de JHipster 9.4.0: https://www.jhipster.tech/documentation-archive/v9.4.0
+- Angular: https://angular.dev/
+- Spring Boot: https://spring.io/projects/spring-boot
 
-```bash
-ng generate component my-component
-```
-
-will generate few files:
-
-```bash
-create src/main/webapp/app/my-component/my-component.html
-create src/main/webapp/app/my-component/my-component.ts
-update src/main/webapp/app/app.config.ts
-```
-
-## Building for production
-
-### Packaging as jar
-
-To build the final jar and optimize the discographyx application for production, run:
-
-```bash
-./mvnw -Pprod clean verify
-```
-
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
-To ensure everything worked, run:
-
-```bash
-java -jar target/*.jar
-```
-
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
-
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
-
-```bash
-./mvnw -Pprod,war clean verify
-```
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-```bash
-docker compose -f src/main/docker/jhipster-control-center.yml up
-```
-
-## Testing
-
-### Spring Boot tests
-
-To launch your application's tests, run:
-
-```bash
-./mvnw verify
-```
-
-### Client tests
-
-Unit tests are run by Vitest. They're located near components and can be run with:
-
-```bash
-./npmw test
-```
-
-## Others
-
-### Code quality using Sonar
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```bash
-docker compose -f src/main/docker/sonar.yml up -d
-```
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-```bash
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-```bash
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```bash
-sonar.login=admin
-sonar.password=admin
-```
-
-For more information, refer to the [Code quality page][].
-
-### Docker Compose support
-
-JHipster generates a number of Docker Compose configuration files in the [src/main/docker/](src/main/docker/) folder to launch required third party services.
-
-For example, to start required services in Docker containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml up -d
-```
-
-To stop and remove the containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml down
-```
-
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in `application.yml`:
-
-```yaml
-spring:
-  ...
-  docker:
-    compose:
-      enabled: false
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a Docker image of your app by running:
-
-```bash
-npm run java:docker
-```
-
-Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M*), running:
-
-```bash
-npm run java:docker:arm64
-```
-
-Then run:
-
-```bash
-docker compose -f src/main/docker/app.yml up -d
-```
-
-For more information refer to [Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.4.0/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.4.0/setting-up-ci/) page for more information.
-
-## References
-
-- [JHipster Homepage and latest documentation](https://www.jhipster.tech/)
-- [JHipster 9.4.0 archive](https://www.jhipster.tech/documentation-archive/v9.4.0)
-- [Using JHipster in development](https://www.jhipster.tech/documentation-archive/v9.4.0/development/)
-- [Using Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.4.0/docker-compose)
-- [Using JHipster in production](https://www.jhipster.tech/documentation-archive/v9.4.0/production/)
-- [Running tests page](https://www.jhipster.tech/documentation-archive/v9.4.0/running-tests/)
-- [Code quality page](https://www.jhipster.tech/documentation-archive/v9.4.0/code-quality/)
-- [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.4.0/setting-up-ci/)
-- [Node.js](https://nodejs.org/)
-- [NPM](https://www.npmjs.com/)
-- [Jest](https://jestjs.io)
-- [Leaflet](https://leafletjs.com/)
-- [DefinitelyTyped](https://definitelytyped.org/)
-- [Angular CLI](https://angular.dev/tools/cli)
+**Nota:** el entorno descrito es de desarrollo local; no está preparado para despliegue de producción.
