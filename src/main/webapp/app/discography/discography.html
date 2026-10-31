@@ -1,0 +1,169 @@
+<main class="dx-discography">
+  <a class="dx-back" routerLink="/" fragment="explorar">← BUSCAR OTRA BANDA</a>
+  @if (loading()) {
+    <div class="dx-wait" role="status"><span class="dx-spinning-record" aria-hidden="true">◎</span> Abriendo el archivo de la banda…</div>
+  }
+  @if (error()) {
+    <p class="dx-error" role="alert">{{ error() }}</p>
+    @if (!data()) {
+      <button type="button" (click)="retry()">VOLVER A INTENTAR</button>
+    }
+  }
+  @if (data(); as catalog) {
+    <header class="dx-band-header">
+      <div>
+        <p class="dx-eyebrow">// ARTIST FILE · DISCOGRAPHYX</p>
+        <h1>{{ catalog.artist.name }}</h1>
+        <p class="dx-band-facts">
+          {{ country(catalog.artist.country) }} <span>/</span>
+          {{ catalog.artist.beginDate ? 'Desde ' + year(catalog.artist.beginDate) : 'Inicio no documentado' }}
+        </p>
+        @if (catalog.artist.disambiguation) {
+          <p class="dx-band-note">{{ catalog.artist.disambiguation }}</p>
+        }
+        <div class="dx-genres">
+          @for (genre of catalog.genres.slice(0, 6); track genre) {
+            <span>{{ genre }}</span>
+          }
+        </div>
+      </div>
+      <div class="dx-catalog-count">
+        <strong>{{ catalog.total }}</strong
+        ><span>LANZAMIENTOS<br />EN EL ARCHIVO</span>
+      </div>
+    </header>
+
+    @if (activeAlbum(); as album) {
+      <section class="dx-album-detail" id="dx-album-panel" aria-labelledby="dx-album-title" [attr.aria-busy]="albumLoading()">
+        <div class="dx-album-art">
+          @if (!brokenCovers().has(album.musicBrainzId)) {
+            <img [src]="album.coverUrl" [alt]="'Portada de ' + album.title" (error)="coverFailed(album.musicBrainzId)" />
+          } @else {
+            <div class="dx-no-cover"><span aria-hidden="true">◎</span><small>PORTADA NO DISPONIBLE</small></div>
+          }
+        </div>
+        <div class="dx-album-body">
+          <div class="dx-detail-top">
+            <p class="dx-eyebrow">{{ year(album.firstReleaseDate) }} / {{ type(album) }}</p>
+            <button type="button" (click)="closeAlbum()" aria-label="Cerrar detalle del álbum">CERRAR ×</button>
+          </div>
+          <h2 id="dx-album-title">{{ album.title }}</h2>
+          <p class="dx-overview">
+            {{ type(album) }} de {{ catalog.artist.name
+            }}{{
+              album.firstReleaseDate
+                ? ', publicado originalmente en ' + year(album.firstReleaseDate)
+                : ', sin fecha de publicación documentada'
+            }}.
+            @if (album.secondaryTypes.length) {
+              Clasificado como {{ album.secondaryTypes.join(' / ') }}.
+            }
+          </p>
+          @if (albumLoading()) {
+            <p role="status">Consultando la edición y sus temas…</p>
+          }
+          @if (albumError()) {
+            <p class="dx-error" role="alert">{{ albumError() }}</p>
+            <button type="button" (click)="openAlbum(album)">REINTENTAR</button>
+          }
+          @if (albumDetail(); as detail) {
+            <p class="dx-edition">
+              {{ detail.trackCount }} temas · Edición consultada: {{ detail.editionDate || 'sin fecha'
+              }}{{ detail.editionCountry ? ' / ' + detail.editionCountry : '' }}. Los temas pueden variar entre ediciones.
+            </p>
+            <div class="dx-listen-links">
+              @for (link of detail.listenLinks; track link.url) {
+                <a [href]="link.url" target="_blank" rel="noopener noreferrer">ESCUCHAR EN {{ link.label }} ↗</a>
+              }
+              <a [href]="listenSearch(album.title)" target="_blank" rel="noopener noreferrer">BUSCAR EN YOUTUBE MUSIC ↗</a>
+            </div>
+            <ol class="dx-tracks" aria-label="Temas del álbum">
+              @for (track of detail.tracks; track $index) {
+                <li>
+                  <span class="dx-track-number">{{ track.disc }}.{{ track.number || $index + 1 }}</span
+                  ><span>{{ track.title || 'Título no documentado' }}</span
+                  ><time>{{ duration(track.length) }}</time
+                  ><a
+                    [href]="listenSearch(track.title || album.title)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    [attr.aria-label]="'Buscar audio de ' + track.title"
+                    >BUSCAR AUDIO ↗</a
+                  >
+                </li>
+              } @empty {
+                <li>Esta edición todavía no tiene temas documentados.</li>
+              }
+            </ol>
+            <p class="dx-source">
+              Ficha basada en MusicBrainz.
+              <a [href]="'https://musicbrainz.org/release-group/' + album.musicBrainzId" target="_blank" rel="noopener noreferrer"
+                >Ver fuente ↗</a
+              >
+            </p>
+          }
+        </div>
+      </section>
+    }
+
+    <section aria-labelledby="dx-discography-title">
+      <div class="dx-section-head">
+        <div>
+          <p class="dx-eyebrow">// DEL PRIMER RIFF AL ÚLTIMO DISCO</p>
+          <h2 id="dx-discography-title">LA DISCOGRAFÍA<span>.</span></h2>
+        </div>
+        <p>{{ visibleAlbums().length }} discos · Orden cronológico</p>
+      </div>
+      <div class="dx-filters" aria-label="Filtrar lanzamientos">
+        @for (option of filters; track option.id) {
+          <button
+            type="button"
+            [class.active]="filter() === option.id"
+            [attr.aria-pressed]="filter() === option.id"
+            (click)="filter.set(option.id)"
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+      <div class="dx-album-grid">
+        @for (album of visibleAlbums(); track album.musicBrainzId) {
+          <button
+            type="button"
+            class="dx-album-card"
+            [class.selected]="activeAlbum()?.musicBrainzId === album.musicBrainzId"
+            (click)="openAlbum(album)"
+            [attr.aria-label]="'Ver temas de ' + album.title"
+          >
+            <div class="dx-album-art">
+              @if (!brokenCovers().has(album.musicBrainzId)) {
+                <img [src]="album.coverUrl" [alt]="'Portada de ' + album.title" loading="lazy" (error)="coverFailed(album.musicBrainzId)" />
+              } @else {
+                <div class="dx-no-cover"><span aria-hidden="true">◎</span><small>PORTADA NO DISPONIBLE</small></div>
+              }
+              <span class="dx-cover-action">VER TEMAS ↗</span>
+            </div>
+            <div class="dx-album-caption">
+              <span class="dx-year">{{ year(album.firstReleaseDate) }}</span>
+              <h3>{{ album.title }}</h3>
+              <span class="dx-album-type">{{ type(album) }}</span>
+            </div>
+          </button>
+        } @empty {
+          <p class="dx-empty">No hay discos de esta categoría en los lanzamientos cargados. Probá con «Todos».</p>
+        }
+      </div>
+      @if (catalog.offset + 100 < catalog.total) {
+        <div class="dx-more">
+          <p>{{ catalog.albums.length }} de {{ catalog.total }} lanzamientos cargados.</p>
+          <button type="button" [disabled]="loadingMore()" (click)="loadMore()">
+            {{ loadingMore() ? 'CARGANDO…' : 'CARGAR MÁS DISCOS' }}
+          </button>
+        </div>
+      }
+    </section>
+    <footer class="dx-attribution">
+      Metadatos: MusicBrainz · Portadas: Cover Art Archive. La disponibilidad de tapas y audio depende de cada lanzamiento.
+    </footer>
+  }
+</main>

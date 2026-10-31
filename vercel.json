@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "angular",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run webapp:build:prod",
+  "outputDirectory": "target/classes/static",
+  "rewrites": [{ "source": "/((?!.*\\.).*)", "destination": "/index.html" }]
+}

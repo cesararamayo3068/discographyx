@@ -7,6 +7,11 @@ import { errorRoute } from './layouts/error/error.route';
 
 const routes: Routes = [
   {
+    path: 'bandas/:id',
+    loadComponent: () => import('./discography/discography'),
+    title: 'home.title',
+  },
+  {
     path: '',
     loadComponent: () => import('./home/home'),
     title: 'home.title',

@@ -66,6 +66,8 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/account/reset-password/init").permitAll()
                     .requestMatchers("/api/account/reset-password/finish").permitAll()
                     .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers(HttpMethod.GET, "/api/music/artists").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/music/artists/*", "/api/music/albums/*").permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/management/health").permitAll()

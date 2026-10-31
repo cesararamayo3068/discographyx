@@ -1,8 +1,8 @@
 {
   "global": {
-    "title": "Discographyx",
+    "title": "DiscographyX",
     "menu": {
-      "home": "Home",
+      "home": "EXPLORE",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
@@ -10,7 +10,7 @@
         "adminAuthority": "Authority"
       },
       "account": {
-        "main": "Account",
+        "main": "MY ACCOUNT",
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",

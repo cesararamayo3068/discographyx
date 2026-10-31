@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 import { LANGUAGES } from 'app/config';
-import { Account, AccountService } from 'app/core/auth';
+import { Account, AccountService, StateStorageService } from 'app/core/auth';
 import { AlertError } from 'app/shared/alert';
 import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 
@@ -41,11 +41,12 @@ export default class Settings implements OnInit {
 
   private readonly accountService = inject(AccountService);
   private readonly translateService = inject(TranslateService);
+  private readonly stateStorageService = inject(StateStorageService);
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
       if (account) {
-        this.settingsForm.patchValue(account);
+        this.settingsForm.patchValue({ ...account, langKey: this.translateService.getCurrentLang() ?? account.langKey });
       }
     });
   }
@@ -59,6 +60,7 @@ export default class Settings implements OnInit {
         this.success.set(true);
 
         this.accountService.authenticate(account);
+        this.stateStorageService.storeLocale(account.langKey);
 
         if (account.langKey !== this.translateService.getCurrentLang()) {
           this.translateService.use(account.langKey);

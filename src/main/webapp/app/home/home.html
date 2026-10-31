@@ -3,11 +3,16 @@
     <div class="dx-hero-copy">
       <p class="dx-eyebrow"><span class="dx-live-dot"></span> THE HEAVY MUSIC ARCHIVE <span class="dx-eyebrow-line"></span> EST. 2026</p>
       <h1 id="dx-title">THE SOUND<br />OF <em>LEGENDS.</em></h1>
-      <p class="dx-intro">Un lugar para descubrir bandas, explorar discografías y recorrer la historia del heavy metal y el death metal. Del primer demo al último álbum.</p>
+      <p class="dx-intro">
+        Un lugar para descubrir bandas, explorar discografías y recorrer la historia del heavy metal y el death metal. Del primer demo al
+        último álbum.
+      </p>
       <div class="dx-actions">
         <a class="dx-button dx-button-primary" href="#explorar">EXPLORAR EL ARCHIVO <span aria-hidden="true">↗</span></a>
         @if (account() === null) {
-          <button class="dx-button dx-button-outline" type="button" (click)="login()">INICIAR SESIÓN <span aria-hidden="true">→</span></button>
+          <button class="dx-button dx-button-outline" type="button" (click)="login()">
+            INICIAR SESIÓN <span aria-hidden="true">→</span>
+          </button>
         } @else {
           <span class="dx-session" id="home-logged-message">● SESIÓN ACTIVA: {{ account()?.login }}</span>
         }
@@ -16,18 +21,76 @@
     </div>
     <div class="dx-hero-art" aria-hidden="true">
       <div class="dx-record-glow"></div>
-      <div class="dx-record"><div class="dx-record-label"><span>DX</span><small>33⅓ RPM</small></div></div>
+      <div class="dx-record">
+        <div class="dx-record-label"><span>DX</span><small>33⅓ RPM</small></div>
+      </div>
       <div class="dx-art-caption">PLAY IT LOUD <span>///</span> VOL. 001</div>
     </div>
   </section>
-  <section class="dx-marquee" aria-label="Géneros musicales"><span>HEAVY METAL</span><b>✦</b><span>DEATH METAL</span><b>✦</b><span>THRASH METAL</span><b>✦</b><span>BLACK METAL</span><b>✦</b><span>DOOM METAL</span></section>
+  <section class="dx-marquee" aria-label="Géneros musicales">
+    <span>HEAVY METAL</span><b>✦</b><span>DEATH METAL</span><b>✦</b><span>THRASH METAL</span><b>✦</b><span>BLACK METAL</span><b>✦</b
+    ><span>DOOM METAL</span>
+  </section>
   <section class="dx-explore" id="explorar" aria-labelledby="dx-explore-title">
-    <div class="dx-section-heading"><div><p class="dx-kicker">// EL ARCHIVO</p><h2 id="dx-explore-title">EXPLORÁ EL <span>UNDERGROUND.</span></h2></div><span class="dx-section-index">01 / DISCOVER</span></div>
-    <div class="dx-grid">
-      <article class="dx-tile dx-tile-bands"><div class="dx-tile-top"><span>01 — ARTISTAS</span><span aria-hidden="true">↗</span></div><div><span class="dx-tile-symbol" aria-hidden="true">⚡</span><h3>BANDAS</h3><p>Las historias detrás del ruido. Próximamente: catálogo de bandas.</p></div><span class="dx-tag">PRÓXIMAMENTE</span></article>
-      <article class="dx-tile dx-tile-albums"><div class="dx-tile-top"><span>02 — LANZAMIENTOS</span><span aria-hidden="true">↗</span></div><div><span class="dx-tile-symbol" aria-hidden="true">◎</span><h3>ÁLBUMES</h3><p>Discos esenciales, joyas ocultas y lanzamientos. Próximamente.</p></div><span class="dx-tag">PRÓXIMAMENTE</span></article>
-      <article class="dx-tile dx-tile-archive"><div class="dx-tile-top"><span>03 — COLECCIONES</span><span aria-hidden="true">↗</span></div><div><span class="dx-tile-symbol" aria-hidden="true">▤</span><h3>DISCOGRAFÍAS</h3><p>Recorré cada etapa, cada formación, cada sonido. Próximamente.</p></div><span class="dx-tag">PRÓXIMAMENTE</span></article>
+    <div class="dx-section-heading">
+      <div>
+        <p class="dx-kicker">// EL ARCHIVO</p>
+        <h2 id="dx-explore-title">EXPLORÁ EL <span>UNDERGROUND.</span></h2>
+      </div>
+      <span class="dx-section-index">01 / DISCOVER</span>
     </div>
+    <form class="dx-search" (ngSubmit)="search()" aria-label="Buscar bandas y artistas">
+      <label for="artist-query">UNA BANDA. TODA SU HISTORIA.</label>
+      <div class="dx-search-controls">
+        <input
+          id="artist-query"
+          name="query"
+          type="search"
+          [(ngModel)]="query"
+          minlength="2"
+          maxlength="100"
+          required
+          placeholder="Ej.: Death, Iron Maiden, Metallica"
+        />
+        <button class="dx-button dx-button-primary" type="submit" [disabled]="loading() || query.trim().length < 2">BUSCAR</button>
+      </div>
+      <p>
+        Catálogo de <a href="https://musicbrainz.org" target="_blank" rel="noopener noreferrer">MusicBrainz</a>. Buscá por nombre completo y
+        recorré sus discos.
+      </p>
+    </form>
+    <div aria-live="polite" aria-atomic="true">
+      @if (loading()) {
+        <p class="dx-search-status" role="status">Consultando MusicBrainz…</p>
+      }
+      @if (error()) {
+        <p class="dx-search-status dx-search-error" role="alert">{{ error() }}</p>
+      }
+    </div>
+    @if (result(); as page) {
+      @if (page.total === 0) {
+        <p class="dx-search-status" role="status">
+          No encontramos coincidencias cercanas. Revisá el nombre o probá con el nombre completo.
+        </p>
+      } @else {
+        <p class="dx-search-status" role="status">
+          {{ page.total === 1 ? 'Una coincidencia · Abriendo discografía…' : page.total + ' coincidencias por nombre · Elegí una banda' }}
+        </p>
+        <div class="dx-grid dx-results" aria-label="Resultados de búsqueda">
+          @for (artist of page.artists; track artist.musicBrainzId) {
+            <article class="dx-tile">
+              <div class="dx-tile-top">{{ artist.type || 'TIPO NO DISPONIBLE' }}</div>
+              <h3>{{ artist.name }}</h3>
+              @if (artist.disambiguation) {
+                <p>{{ artist.disambiguation }}</p>
+              }
+              <p>País: {{ artist.country || 'No disponible' }}<br />Inicio: {{ artist.beginDate || 'No disponible' }}</p>
+              <a class="dx-artist-link" [routerLink]="['/bandas', artist.musicBrainzId]">EXPLORAR DISCOGRAFÍA →</a>
+            </article>
+          }
+        </div>
+      }
+    }
   </section>
   <section class="dx-bottom"><span>BUILT FOR THE RIFFS. MADE FOR THE FANS.</span><strong>DISCOGRAPHYX © 2026</strong></section>
 </main>

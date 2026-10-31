@@ -28,7 +28,14 @@ export default {
     // If this URL is left empty (""), then it will be relative to the current context.
     // If you use an API server, in `prod` mode, you will need to enable CORS
     // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
-    build.initialOptions.define.SERVER_API_URL = "''";
+    const apiUrl = process.env.SERVER_API_URL?.trim() ?? '';
+    if (process.env.VERCEL === '1' && !apiUrl) {
+      throw new Error('Set SERVER_API_URL to the Render backend URL in Vercel before deploying.');
+    }
+    if (apiUrl && !/^https?:\/\//.test(apiUrl)) {
+      throw new Error('SERVER_API_URL must be an absolute HTTP(S) URL.');
+    }
+    build.initialOptions.define.SERVER_API_URL = JSON.stringify(apiUrl ? `${apiUrl.replace(/\/+$/, '')}/` : '');
 
     // Emit the swagger-ui libraries with the build output, next to the swagger-ui/index.html asset.
     // The page itself stays an angular.json asset: the dev server serves html files from the assets only.

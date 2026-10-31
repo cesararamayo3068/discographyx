@@ -1,0 +1,23 @@
+{
+  "discographyxApp": {
+    "adminAuthority": {
+      "home": {
+        "title": "Permisos",
+        "refreshListLabel": "Actualizar lista",
+        "createLabel": "Crear permiso",
+        "createOrEditLabel": "Crear o editar permiso",
+        "notFound": "No se encontraron permisos"
+      },
+      "created": "Se creó un permiso con el identificador {{ param }}",
+      "updated": "Se actualizó el permiso {{ param }}",
+      "deleted": "Se eliminó el permiso {{ param }}",
+      "delete": {
+        "question": "¿Querés eliminar el permiso {{ id }}?"
+      },
+      "detail": {
+        "title": "Permiso"
+      },
+      "name": "Nombre"
+    }
+  }
+}

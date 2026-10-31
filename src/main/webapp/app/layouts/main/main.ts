@@ -6,12 +6,11 @@ import dayjs from 'dayjs/esm';
 
 import { AccountService } from 'app/core/auth';
 import Footer from '../footer/footer';
-import PageRibbon from '../profiles/page-ribbon';
 
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.html',
-  imports: [RouterOutlet, Footer, PageRibbon],
+  imports: [RouterOutlet, Footer],
 })
 export default class Main implements OnInit {
   private readonly renderer: Renderer2;
@@ -30,6 +29,9 @@ export default class Main implements OnInit {
   }
 
   ngOnInit(): void {
+    const language = this.translateService.getCurrentLang() ?? 'es';
+    this.renderer.setAttribute(this.htmlElement, 'lang', language);
+    dayjs.locale(language);
     // try to log in automatically
     this.accountService.identity().subscribe();
 

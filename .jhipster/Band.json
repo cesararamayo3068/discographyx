@@ -1,0 +1,55 @@
+{
+  "annotations": {},
+  "applications": ["*"],
+  "documentation": "Musical bands imported from MusicBrainz.",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "musicBrainzId",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "150",
+      "fieldValidateRulesMinlength": "2"
+    },
+    {
+      "fieldName": "country",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "genre",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "formationYear",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMax": "2100",
+      "fieldValidateRulesMin": "1800"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "name": "Band",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "album",
+      "otherEntityRelationshipName": "band",
+      "relationshipName": "albums",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "serviceClass"
+}

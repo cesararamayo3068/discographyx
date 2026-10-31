@@ -1,0 +1,16 @@
+.git
+.env
+.env.*
+.yo-rc.json
+.codex
+.agents
+node_modules
+node
+target
+dist
+.angular
+coverage
+*.log
+*.zip
+*.pem
+*.key

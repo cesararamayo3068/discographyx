@@ -3,7 +3,6 @@
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
       <span class="dx-logo-mark" aria-hidden="true">DX<span class="dx-logo-slash">/</span></span>
       <span class="navbar-title">DISCOGRAPHY<span class="dx-brand-x">X</span></span>
-      <span class="navbar-version">{{ version }}</span>
     </a>
     <a
       class="navbar-toggler d-lg-none"
@@ -21,30 +20,10 @@
           <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
             <span>
               <fa-icon icon="home" />
-              <span jhiTranslate="global.menu.home">Home</span>
+              <span jhiTranslate="global.menu.home">EXPLORAR</span>
             </span>
           </a>
         </li>
-        @if (account() !== null) {
-          <li
-            ngbDropdown
-            class="nav-item dropdown pointer"
-            display="static"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            data-cy="entity"
-          >
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
-              <span>
-                <fa-icon icon="th-list" />
-                <span jhiTranslate="global.menu.entities.main">Entities</span>
-              </span>
-            </a>
-            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-              <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-            </ul>
-          </li>
-        }
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown
@@ -156,7 +135,7 @@
             @if (!accountRef?.imageUrl) {
               <span>
                 <fa-icon icon="user" />
-                <span jhiTranslate="global.menu.account.main">Account</span>
+                <span jhiTranslate="global.menu.account.main">MI CUENTA</span>
               </span>
             } @else {
               <span>
