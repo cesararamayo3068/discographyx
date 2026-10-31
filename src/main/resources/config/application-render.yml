@@ -1,0 +1,52 @@
+# Render runs the API; Vercel serves Angular. Required secrets are supplied in Render's dashboard.
+server:
+  address: 0.0.0.0
+  port: ${PORT:8080}
+  forward-headers-strategy: framework
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 2
+
+spring:
+  docker:
+    compose:
+      enabled: false
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 0
+      connection-timeout: 30000
+  liquibase:
+    contexts: prod,render
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+jhipster:
+  cors:
+    allowed-origins: ${FRONTEND_URL}
+    allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+    allowed-headers: '*'
+    exposed-headers: Authorization,Link,X-Total-Count
+    allow-credentials: false
+    max-age: 1800
+  security:
+    authentication:
+      jwt:
+        base64-secret: ${JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET}
+  mail:
+    base-url: ${FRONTEND_URL}
+
+application:
+  liquibase:
+    async-start: false

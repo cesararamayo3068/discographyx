@@ -75,6 +75,8 @@ compose.yaml                    Orquestación local de tres servicios
 
 ## Desarrollo local con Docker
 
+Para publicar el backend en Render, PostgreSQL en Neon y el frontend en Vercel, ver [DEPLOYMENT.md](DEPLOYMENT.md). La configuración está preparada para esos servicios; las URLs y credenciales se cargan en sus paneles web.
+
 El proyecto se trabaja en **Windows + Docker Desktop**, sin instalar Java, Node.js ni Maven globalmente en Windows.
 
 ### Puertos
@@ -155,4 +157,4 @@ Los menús y pantallas de cuenta admiten **Español / English**. Español es el 
 - Angular: https://angular.dev/
 - Spring Boot: https://spring.io/projects/spring-boot
 
-**Nota:** el entorno descrito es de desarrollo local; no está preparado para despliegue de producción.
+**Nota:** `compose.yaml` corresponde al desarrollo local. El despliegue remoto usa el Dockerfile y el perfil `prod,render` descritos en la guía de publicación.
