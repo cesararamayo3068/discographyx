@@ -1,0 +1,45 @@
+/**
+ * Musical bands imported from MusicBrainz.
+ */
+entity Band {
+  musicBrainzId UUID required unique
+  name String required minlength(2) maxlength(150)
+  country String maxlength(100)
+  genre String maxlength(100)
+  formationYear Integer min(1800) max(2100)
+  description TextBlob
+}
+
+/**
+ * Musical releases associated with bands.
+ */
+entity Album {
+  musicBrainzId UUID required unique
+  title String required minlength(1) maxlength(200)
+  releaseYear Integer min(1800) max(2100)
+  releaseType ReleaseType
+  coverUrl String maxlength(500)
+}
+
+/**
+ * Musical release categories.
+ */
+enum ReleaseType {
+  STUDIO,
+  LIVE,
+  EP,
+  DEMO,
+  COMPILATION,
+  SINGLE
+}
+
+/**
+ * One band can have multiple albums.
+ */
+relationship OneToMany {
+  Band{albums} to Album{band(name) required}
+}
+
+dto Band, Album with mapstruct
+service Band, Album with serviceClass
+pagination Band, Album with pagination

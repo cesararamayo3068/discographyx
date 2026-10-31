@@ -1,0 +1,346 @@
+$red: #ed3638;
+:host {
+  display: block;
+}
+.dx-discography {
+  padding: clamp(24px, 5vw, 72px);
+  color: #f1efec;
+  background: #101012;
+  min-height: 80vh;
+}
+a {
+  color: #ff8283;
+  text-underline-offset: 4px;
+}
+button {
+  color: inherit;
+  background: transparent;
+  border: 1px solid #4b4448;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+button:hover {
+  border-color: $red;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid $red;
+  outline-offset: 5px;
+}
+.dx-back,
+.dx-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.dx-back {
+  text-decoration: none;
+  color: #c5b8b8;
+}
+.dx-eyebrow {
+  color: $red;
+  margin: 0 0 18px;
+}
+.dx-band-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 54px 0 44px;
+  margin-bottom: 38px;
+  border-bottom: 1px solid #3d3033;
+}
+h1 {
+  font-weight: 950;
+  letter-spacing: -0.06em;
+  font-size: clamp(2.8rem, 6vw, 6rem);
+  line-height: 1.02;
+  margin-bottom: 22px;
+  overflow-wrap: anywhere;
+}
+.dx-band-facts {
+  color: #c8c0c0;
+  font-size: 1rem;
+}
+.dx-band-facts span {
+  color: $red;
+  margin: 0 12px;
+}
+.dx-band-note,
+.dx-overview {
+  color: #b7adae;
+  line-height: 1.7;
+  max-width: 760px;
+}
+.dx-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dx-genres span {
+  border: 1px solid #4f3436;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  color: #e2b2b2;
+  text-transform: uppercase;
+}
+.dx-catalog-count {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.dx-catalog-count strong {
+  color: $red;
+  font-size: 4rem;
+  font-weight: 900;
+}
+.dx-catalog-count span {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: #afa4a4;
+}
+.dx-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 40px 0 24px;
+}
+h2 {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+h2 span {
+  color: $red;
+}
+.dx-section-head p:last-child {
+  color: #aaa;
+  font-size: 0.8rem;
+}
+.dx-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.dx-filters button {
+  font-size: 0.75rem;
+  padding: 9px 14px;
+  color: #c0b5b5;
+}
+.dx-filters button.active {
+  color: white;
+  background: $red;
+  border-color: $red;
+}
+.dx-album-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px 22px;
+}
+.dx-album-card {
+  text-align: left;
+  padding: 0;
+  border: 1px solid #332b2e;
+  background: #191719;
+  transition: transform 0.2s;
+}
+.dx-album-card:hover {
+  transform: translateY(-4px);
+}
+.dx-album-card.selected {
+  border-color: $red;
+}
+.dx-album-art {
+  position: relative;
+  aspect-ratio: 1;
+  background: repeating-radial-gradient(circle, #19191c 0 4px, #242326 5px 6px);
+  overflow: hidden;
+}
+.dx-album-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dx-cover-action {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: $red;
+  padding: 9px 12px;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+.dx-album-caption {
+  padding: 18px;
+}
+.dx-year {
+  font-size: 0.75rem;
+  color: #ff7375;
+  font-weight: 800;
+}
+h3 {
+  font-size: 1.1rem;
+  line-height: 1.3;
+  font-weight: 800;
+  margin: 7px 0;
+}
+.dx-album-type {
+  color: #b3a8ab;
+  font-size: 0.75rem;
+}
+.dx-no-cover {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  height: 100%;
+  color: #b0a1a4;
+  gap: 10px;
+}
+.dx-no-cover span {
+  font-size: 5rem;
+  color: #9c3438;
+}
+.dx-no-cover small {
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+}
+.dx-album-detail {
+  display: grid;
+  grid-template-columns: minmax(180px, 300px) minmax(0, 1fr);
+  gap: 32px;
+  padding: 24px;
+  background: #1b1719;
+  border-top: 2px solid $red;
+  scroll-margin-top: 28px;
+}
+.dx-detail-top {
+  display: flex;
+  gap: 20px;
+  align-items: start;
+  justify-content: space-between;
+}
+.dx-detail-top button {
+  border: 0;
+  padding: 0;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+.dx-album-body h2 {
+  margin-bottom: 18px;
+}
+.dx-edition,
+.dx-source {
+  font-size: 0.72rem;
+  color: #afa5a7;
+  line-height: 1.7;
+}
+.dx-listen-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+}
+.dx-listen-links a {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  border: 1px solid #794044;
+  padding: 9px 12px;
+  text-decoration: none;
+}
+.dx-tracks {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+}
+.dx-tracks li {
+  display: grid;
+  grid-template-columns: 32px 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid #3d3035;
+  font-size: 0.82rem;
+}
+.dx-tracks a {
+  font-size: 0.6rem;
+}
+.dx-track-number,
+time {
+  color: #b0a0a4;
+  font-variant-numeric: tabular-nums;
+}
+.dx-more {
+  text-align: center;
+  padding: 30px 0;
+}
+.dx-wait {
+  min-height: 250px;
+  display: grid;
+  place-content: center;
+  gap: 18px;
+  text-align: center;
+  color: #c9b8b8;
+}
+.dx-spinning-record {
+  color: $red;
+  font-size: 4rem;
+}
+.dx-empty {
+  color: #bfb1b4;
+  grid-column: 1 / -1;
+  padding: 32px 0;
+}
+.dx-error {
+  color: #ff9294;
+}
+.dx-attribution {
+  border-top: 1px solid #3d3033;
+  margin-top: 50px;
+  padding-top: 24px;
+  font-size: 0.7rem;
+  color: #a69a9d;
+}
+@media (max-width: 1100px) {
+  .dx-album-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .dx-album-detail {
+    grid-template-columns: 190px minmax(0, 1fr);
+    gap: 22px;
+  }
+}
+@media (max-width: 760px) {
+  .dx-album-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .dx-band-header {
+    display: block;
+  }
+  .dx-catalog-count {
+    margin-top: 25px;
+  }
+  .dx-album-detail {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+  .dx-album-detail > .dx-album-art {
+    width: min(100%, 280px);
+  }
+  .dx-tracks li {
+    grid-template-columns: 28px 1fr auto;
+  }
+  .dx-tracks a {
+    grid-column: 2 / -1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dx-album-card {
+    transition: none;
+  }
+}

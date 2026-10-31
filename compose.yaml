@@ -26,7 +26,7 @@ services:
     container_name: discographyx-backend
     restart: unless-stopped
     working_dir: /home/jhipster/app
-    command: ./mvnw
+    command: ./mvnw -Dskip.installnodenpm -Dskip.npm
     ports:
       - "127.0.0.1:18081:8080"
     environment:

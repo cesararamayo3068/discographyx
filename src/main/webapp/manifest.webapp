@@ -1,31 +1,9 @@
 {
-  "name": "Discographyx",
-  "short_name": "Discographyx",
-  "icons": [
-    {
-      "src": "./content/images/jhipster_family_member_3_head-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "./content/images/jhipster_family_member_3_head-256.png",
-      "sizes": "256x256",
-      "type": "image/png"
-    },
-    {
-      "src": "./content/images/jhipster_family_member_3_head-384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "./content/images/jhipster_family_member_3_head-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ],
-  "theme_color": "#000000",
-  "background_color": "#e0e0e0",
+  "name": "DiscographyX",
+  "short_name": "DiscographyX",
+  "icons": [{ "src": "./content/images/discographyx.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }],
+  "theme_color": "#101012",
+  "background_color": "#101012",
   "start_url": ".",
-  "display": "standalone",
-  "orientation": "portrait"
+  "display": "standalone"
 }
